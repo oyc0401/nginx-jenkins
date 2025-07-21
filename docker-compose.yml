@@ -1,0 +1,21 @@
+# docker-compose.yml
+version: "3.9"
+
+services:
+  nginx:
+    image: nginx:1.25-alpine     # 필요하면 버전 고정
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      # Nginx 설정
+      - ./conf/nginx.conf:/etc/nginx/nginx.conf:ro
+
+      # ACME challenge 경로 (호스트 Certbot이 사용하는 웹루트)
+      - /var/www/letsencrypt:/var/www/letsencrypt:ro
+
+      # 인증서 & SSL 옵션
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+
+    restart: unless-stopped
